@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="Test1.xcdatamodel" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <elements/>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13E28" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Weather" representedClassName="Weather" syncable="YES">
+        <attribute name="condition" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="conditionDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="humidity" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sunrise" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="sunset" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="temperature" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="tempHigh" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="tempLow" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="windBearing" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="windSpeed" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Weather" positionX="-63" positionY="-18" width="128" height="225"/>
+    </elements>
 </model>

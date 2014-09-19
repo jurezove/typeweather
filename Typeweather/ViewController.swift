@@ -13,22 +13,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet weak var mainLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
+    @IBOutlet weak var cityLabel: UILabel!
 
     let defaultTextAnimationDuration:NSTimeInterval = 1
     var locationStatus : NSString = "Not Started"
+    lazy var weatherManager:WeatherManager = WeatherManager()
     
     lazy var locationManager:CLLocationManager = {
         var manager:CLLocationManager = CLLocationManager()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+//        manager.desiredAccuracy = kCLLocationAccuracyKilometer
         return manager
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateWeather"), name: UIApplicationDidBecomeActiveNotification, object: nil)
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,22 +36,28 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
-    }
+//    func delay(delay:Double, closure:()->()) {
+//        dispatch_after(
+//            dispatch_time(
+//                DISPATCH_TIME_NOW,
+//                Int64(delay * Double(NSEC_PER_SEC))
+//            ),
+//            dispatch_get_main_queue(), closure)
+//    }
     
-    func displayWeather() {
-        animateTextChange(self.mainLabel, closure: { () -> () in
+    func displayWeather(json: Dictionary<String, AnyObject>) {
+        animateTextChange(mainLabel, closure: { () -> () in
             self.mainLabel.attributedText = Prettyfier.boldify("The weather is great! It's exactly the same as yesterday.", words: NSArray(array: ["the same"]))
         })
         
-        animateTextChange(self.temperatureLabel, closure: { () -> () in
-            self.temperatureLabel.text = Prettyfier.temperatureText(80)
+        animateTextChange(temperatureLabel, closure: { () -> () in
+            NSLog("%@", json)
+            let main:AnyObject! = json["main"]
+            let temp = Double(main["temp"] as Double)
+            var name = json["name"] as NSString
+            
+            self.cityLabel.text = name
+            self.temperatureLabel.text = Prettyfier.temperatureText(temp)
         })
     }
     
@@ -64,8 +70,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     // Location retrieval
     
     func updateWeather() {
-        self.mainLabel.text = NSLocalizedString("Please standby, I'm currently collecting weather data.", comment: "")
-        self.temperatureLabel.text = ""
+        mainLabel.text = NSLocalizedString("Please standby, I'm currently collecting weather data.", comment: "")
+        temperatureLabel.text = ""
+        cityLabel.text = ""
         
         if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse {
             locationManager.startUpdatingLocation()
@@ -81,9 +88,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        manager.stopUpdatingLocation()
+        locationManager.stopUpdatingLocation()
+        locationManager.startMonitoringSignificantLocationChanges()
         println("\(locations)")
-        displayWeather()
+        let firstLocation = locations[0] as CLLocation
+        weatherManager.currentWeatherFor(firstLocation.coordinate, closure: { (json) -> () in
+//            println(json)
+            self.displayWeather(json as Dictionary<String, AnyObject>)
+        })
+
     }
     
     func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -104,9 +117,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if (shouldIAllow == true) {
             NSLog("Location to Allowed")
             // Start location services
+//            locationManager.startMonitoringSignificantLocationChanges()
             locationManager.startUpdatingLocation()
         } else {
-            self.mainLabel.text = locationStatus;
+            mainLabel.text = locationStatus;
         }
     }
 }

@@ -26,6 +26,14 @@ class Prettyfier {
     }
     
     class func temperatureText(temp: Double) -> String {
-        return String(format: "%.0f°F", temp)
+        return String(format: "%.0f°%@", round(temp), temperatureUnit())
+    }
+    
+    private class func temperatureUnit() -> String {
+        if NSLocale.currentLocale().objectForKey(NSLocaleUsesMetricSystem) as Bool {
+            return "C"
+        } else {
+            return "F"
+        }
     }
 }

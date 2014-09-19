@@ -11,6 +11,8 @@
 		25B386C619CC8C9C001C9D50 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B386C519CC8C9C001C9D50 /* Constants.swift */; };
 		25B386C819CC9800001C9D50 /* Consieur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B386C719CC9800001C9D50 /* Consieur.swift */; };
 		25B386CA19CCA271001C9D50 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25B386C919CCA271001C9D50 /* MapKit.framework */; };
+		25B386CC19CCAB7E001C9D50 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25B386CB19CCAB7E001C9D50 /* Alamofire.framework */; };
+		25B386CE19CCACAA001C9D50 /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 25B386CB19CCAB7E001C9D50 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		25D3218C19C6277E0088A427 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D3218B19C6277E0088A427 /* AppDelegate.swift */; };
 		25D3219119C6277E0088A427 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D3219019C6277E0088A427 /* ViewController.swift */; };
 		25D3219419C6277E0088A427 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25D3219219C6277E0088A427 /* Main.storyboard */; };
@@ -34,11 +36,26 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		25B386CD19CCAC81001C9D50 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				25B386CE19CCACAA001C9D50 /* Alamofire.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		25B386C319CC8C50001C9D50 /* Prettyfier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prettyfier.swift; sourceTree = "<group>"; };
 		25B386C519CC8C9C001C9D50 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		25B386C719CC9800001C9D50 /* Consieur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consieur.swift; sourceTree = "<group>"; };
 		25B386C919CCA271001C9D50 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		25B386CB19CCAB7E001C9D50 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../../../../Library/Developer/Xcode/DerivedData/Typeweather-dvpgugebnnoqolgykqcfgbhpalmo/Build/Products/Debug-iphoneos/Alamofire.framework"; sourceTree = "<group>"; };
 		25C73A7019C9E816008EED42 /* Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Playground.playground; sourceTree = "<group>"; };
 		25D3218619C6277E0088A427 /* Typeweather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Typeweather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25D3218A19C6277E0088A427 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -63,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25B386CC19CCAB7E001C9D50 /* Alamofire.framework in Frameworks */,
 				25B386CA19CCA271001C9D50 /* MapKit.framework in Frameworks */,
 				F6146EA7B5A84C448DA9BD66 /* libPods.a in Frameworks */,
 			);
@@ -155,6 +173,7 @@
 		817E81091F9745F19730F92E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				25B386CB19CCAB7E001C9D50 /* Alamofire.framework */,
 				25B386C919CCA271001C9D50 /* MapKit.framework */,
 				C72F4B24ACAF4532A475355D /* libPods.a */,
 			);
@@ -173,6 +192,7 @@
 				25D3218319C6277E0088A427 /* Frameworks */,
 				25D3218419C6277E0088A427 /* Resources */,
 				F00725A0F5614F44AAEF9874 /* Copy Pods Resources */,
+				25B386CD19CCAC81001C9D50 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
@@ -435,7 +455,10 @@
 			baseConfigurationReference = 589B923A493D48CAB2812A06 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Typeweather-dvpgugebnnoqolgykqcfgbhpalmo/Build/Products/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = Typeweather/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -447,7 +470,10 @@
 			baseConfigurationReference = 589B923A493D48CAB2812A06 /* Pods.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/Typeweather-dvpgugebnnoqolgykqcfgbhpalmo/Build/Products/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = Typeweather/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

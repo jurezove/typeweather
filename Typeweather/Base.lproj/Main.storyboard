@@ -9,6 +9,7 @@
         </mutableArray>
         <mutableArray key="Cardo-Regular.ttf">
             <string>Cardo-Regular</string>
+            <string>Cardo-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -33,10 +34,19 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="72°F" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="lDO-U1-jy9">
-                                <rect key="frame" x="20" y="540" width="560" height="40"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="California" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="lDO-U1-jy9">
+                                <rect key="frame" x="20" y="558" width="560" height="22"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Cdm-Kb-2Ll"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="Cdm-Kb-2Ll"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Cardo-Regular" family="Cardo" pointSize="16"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="72°F" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="440" translatesAutoresizingMaskIntoConstraints="NO" id="tLJ-H6-BoV">
+                                <rect key="frame" x="20" y="510" width="560" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Rnh-JA-9W2"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Cardo-Bold" family="Cardo" pointSize="24"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -49,14 +59,18 @@
                             <constraint firstAttribute="centerY" secondItem="mvt-4T-b9N" secondAttribute="centerY" id="BzY-PR-Tis"/>
                             <constraint firstAttribute="bottom" secondItem="lDO-U1-jy9" secondAttribute="bottom" constant="20" id="GH1-av-tNt"/>
                             <constraint firstItem="lDO-U1-jy9" firstAttribute="leading" secondItem="aV9-bC-BwO" secondAttribute="leading" constant="20" id="WZD-q9-egc"/>
+                            <constraint firstItem="lDO-U1-jy9" firstAttribute="top" secondItem="tLJ-H6-BoV" secondAttribute="bottom" constant="8" symbolic="YES" id="ZTX-Dh-NuF"/>
+                            <constraint firstItem="tLJ-H6-BoV" firstAttribute="trailing" secondItem="lDO-U1-jy9" secondAttribute="trailing" id="e5Y-tx-OTt"/>
                             <constraint firstAttribute="trailing" secondItem="mvt-4T-b9N" secondAttribute="trailing" constant="20" id="jnZ-iV-Ukb"/>
                             <constraint firstAttribute="centerX" secondItem="mvt-4T-b9N" secondAttribute="centerX" id="kAF-vQ-yvi"/>
+                            <constraint firstItem="tLJ-H6-BoV" firstAttribute="leading" secondItem="lDO-U1-jy9" secondAttribute="leading" id="lIe-az-nre"/>
                             <constraint firstAttribute="trailing" secondItem="lDO-U1-jy9" secondAttribute="trailing" constant="20" id="xaB-y5-ewd"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="cityLabel" destination="lDO-U1-jy9" id="IEF-4H-zDh"/>
                         <outlet property="mainLabel" destination="mvt-4T-b9N" id="Crf-GL-5bL"/>
-                        <outlet property="temperatureLabel" destination="lDO-U1-jy9" id="azL-LC-HOk"/>
+                        <outlet property="temperatureLabel" destination="tLJ-H6-BoV" id="d0a-gz-MRO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

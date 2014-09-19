@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import MapKit
 
 class WeatherManager {
     let HoursDifference = 2
@@ -23,10 +24,17 @@ class WeatherManager {
         }
     }
     
-    func currentWeatherFor(city:String) {
-        Alamofire.request(.GET, BaseURL.stringByAppendingPathComponent("weather"), parameters: ["q" : city, "APPID" : OpenWeatherAPIKey])
+    func currentWeatherFor(city: String) {
+        Alamofire.request(.GET, BaseURL.stringByAppendingPathComponent("weather"), parameters: ["q": city, "APPID": OpenWeatherAPIKey])
             .responseJSON {(request, response, JSON, error) in
                 println(JSON)
+        }
+    }
+    
+    func currentWeatherFor(coordinate: CLLocationCoordinate2D, closure:(json: AnyObject)->()) {
+        Alamofire.request(.GET, BaseURL.stringByAppendingPathComponent("weather"), parameters: ["units": measurementUnit(), "lat": coordinate.latitude, "lon": coordinate.longitude, "APPID" : OpenWeatherAPIKey])
+            .responseJSON {(request, response, JSON, error) in
+                closure(json: JSON!)
         }
     }
     
@@ -50,6 +58,14 @@ class WeatherManager {
             .responseJSON {(request, response, JSON, error) in
                 println(request)
                 println(JSON)
+        }
+    }
+    
+    private func measurementUnit() -> String {
+        if NSLocale.currentLocale().objectForKey(NSLocaleUsesMetricSystem) as Bool {
+            return "metric"
+        } else {
+            return "imperial"
         }
     }
 }

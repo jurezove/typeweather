@@ -10,6 +10,7 @@ import Foundation
 import Alamofire
 
 class WeatherManager {
+    let HoursDifference = 2
     let OpenWeatherAPIKey = "cf98fc035983402806b546354723dcf8"
     let BaseURL = "http://api.openweathermap.org/data/2.5/"
     
@@ -32,10 +33,11 @@ class WeatherManager {
     func yesterdaysWeatherForCity(city:String) {
         var yesterdayComponents1 = NSDateComponents()
         yesterdayComponents1.setValue(-1, forComponent: NSCalendarUnit.CalendarUnitDay);
+        yesterdayComponents1.setValue(+HoursDifference, forComponent: NSCalendarUnit.CalendarUnitDay);
         
         var yesterdayComponents2 = NSDateComponents()
         yesterdayComponents2.setValue(-1, forComponent: NSCalendarUnit.CalendarUnitDay);
-        yesterdayComponents2.setValue(-1, forComponent: NSCalendarUnit.CalendarUnitHour);
+        yesterdayComponents2.setValue(-HoursDifference, forComponent: NSCalendarUnit.CalendarUnitHour);
         
         let date: NSDate = NSDate()
         var end = NSCalendar.currentCalendar().dateByAddingComponents(yesterdayComponents1, toDate: date, options: NSCalendarOptions(0))

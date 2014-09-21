@@ -42,7 +42,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         })
         
         animateTextChange(temperatureLabel, closure: { () -> () in
-            NSLog("%@", json)
+//            NSLog("%@", json)
             let main:AnyObject! = json["main"]
             let temp = Double(main["temp"] as Double)
             var name = json["name"] as NSString

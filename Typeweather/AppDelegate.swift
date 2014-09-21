@@ -10,17 +10,25 @@ import UIKit
 import CoreData
 
 @UIApplicationMain
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+
 
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         let manager = WeatherManager()
-//        manager.currentWeatherFor("Maribor,SI")
-        manager.yesterdaysWeatherForCity("Maribor,SI", closure: { (json) -> () in
-            println("Yesterdays weather: \(json)")
-        })
+        manager.getYesterdaysAverageTemperature("San Francisco", closure: { (average) -> () in
+            if (WeatherManager.usingMetric()) {
+                let celsius = WeatherManager.convertToCelsius(average)
+                println("Celsius: \(celsius)°C")
+            } else {
+                let fahrenheit = WeatherManager.convertToFahrenheit(average)
+                println("Fahrenheit: \(fahrenheit)°F")
+            }
+        });
         return true
     }
 

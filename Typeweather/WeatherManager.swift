@@ -10,10 +10,21 @@ import Foundation
 import Alamofire
 import MapKit
 
+
+
 class WeatherManager {
     let HoursDifference = 2
     let OpenWeatherAPIKey:String = "cf98fc035983402806b546354723dcf8"
     let BaseURL = "http://api.openweathermap.org/data/2.5/"
+    
+    struct Weather {
+        let clouds: NSDictionary
+        let dt: NSString
+        let main: NSDictionary
+        let weather: NSArray
+        let rain: NSDictionary
+        let snow: NSDictionary
+    }
     
     func testAlamofire() {
         Alamofire.request(.GET, "http://httpbin.org/get", parameters: ["foo": "bar"])
@@ -25,16 +36,57 @@ class WeatherManager {
     }
     
     func currentWeatherFor(city: String, closure:(json: AnyObject)->()) {
-        self.currengWeatherFor(["units": measurementUnit(), "q": city], closure:closure)
+        self.currentWeatherFor(["units": measurementUnit(), "q": city], closure:closure)
     }
     
     func currentWeatherFor(coordinate: CLLocationCoordinate2D, closure:(json: AnyObject)->()) {
-        self.currengWeatherFor(["units": measurementUnit(), "lat": coordinate.latitude, "lon": coordinate.longitude], closure:closure)
+        self.currentWeatherFor(["units": measurementUnit(), "lat": coordinate.latitude, "lon": coordinate.longitude], closure:closure)
     }
     
     func yesterdaysWeatherForCity(city:String, closure:(json: AnyObject)->()) {
         self.yesterdaysWeatherForCity(["q" : city], closure: closure)
     }
+    
+    func getYesterdaysAverageTemperature(city: String, closure:(average: Double)->()) {
+        self.yesterdaysWeatherForCity(city, closure: { (json) -> () in
+            println(json)
+            var list:[AnyObject] = json["list"] as Array
+            var sum:Double = 0
+            var count:Double = 0
+            for object in list {
+                let dict:[String:AnyObject] = object as Dictionary
+                if let weather:Weather = self.parseWeather(object as Dictionary) {
+                    sum += weather.main["temp"] as Double
+                    count++
+//                    if (WeatherManager.usingMetric()) {
+//                        let celsius = WeatherManager.convertToCelsius(weather.main["temp"] as Double)
+//                        println("Celsius: \(celsius)°C")
+//                    } else {
+//                        let celsius = WeatherManager.convertToFahrenheit(weather.main["temp"] as Double)
+//                        println("Fahrenheit: \(celsius)°F")
+//                    }
+                }
+            }
+            let average = sum/count
+            closure(average: average)
+        })
+    }
+    
+    // Class functions
+    
+    class func convertToCelsius(kelvin: Double) -> Double {
+         return kelvin - 273.15
+    }
+    
+    class func convertToFahrenheit(kelvin: Double) -> Double {
+        return 1.8 * (kelvin - 273.15) + 32
+    }
+    
+    class func usingMetric() -> Bool {
+       return NSLocale.currentLocale().objectForKey(NSLocaleUsesMetricSystem) as Bool
+    }
+    
+    // Privates
     
     private func measurementUnit() -> String {
         if NSLocale.currentLocale().objectForKey(NSLocaleUsesMetricSystem) as Bool {
@@ -48,7 +100,7 @@ class WeatherManager {
         NSUserDefaults.standardUserDefaults().setValue(NSDate.date(), forKey: kUpdatedLocationTimeKey)
     }
     
-    private func currengWeatherFor(params: Dictionary<String, AnyObject>, closure:(json: AnyObject)->()) {
+    private func currentWeatherFor(params: Dictionary<String, AnyObject>, closure:(json: AnyObject)->()) {
         var modified:Dictionary<String, AnyObject> = params
         modified["APPID"] = OpenWeatherAPIKey
         Alamofire.request(.GET, BaseURL.stringByAppendingPathComponent("weather"), parameters: modified)
@@ -64,7 +116,7 @@ class WeatherManager {
         
         var yesterdayComponents1 = NSDateComponents()
         yesterdayComponents1.setValue(-1, forComponent: NSCalendarUnit.CalendarUnitDay);
-        yesterdayComponents1.setValue(+HoursDifference, forComponent: NSCalendarUnit.CalendarUnitDay);
+        yesterdayComponents1.setValue(+HoursDifference, forComponent: NSCalendarUnit.CalendarUnitHour);
         
         var yesterdayComponents2 = NSDateComponents()
         yesterdayComponents2.setValue(-1, forComponent: NSCalendarUnit.CalendarUnitDay);
@@ -82,9 +134,17 @@ class WeatherManager {
         Alamofire.request(.GET, BaseURL.stringByAppendingPathComponent("history/city"),
             parameters: modified)
             .responseJSON {(request, response, JSON, error) in
-//                println(request)
-//                println(JSON)
                 closure(json: JSON!)
         }
     }
+    
+    private func parseWeather(dict: [ String : AnyObject ]) -> Weather? {
+        if let main = dict["main"] as? NSDictionary {
+            if let weather = dict["weather"] as? NSArray {
+                return Weather(clouds: [:], dt: "", main: main, weather: weather, rain: [:], snow: [:])
+            }
+        }
+        return nil
+    }
+    
 }

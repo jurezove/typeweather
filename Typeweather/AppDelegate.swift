@@ -18,7 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         let manager = WeatherManager()
 //        manager.currentWeatherFor("Maribor,SI")
-//        manager.yesterdaysWeatherForCity("Maribor,SI")
+        manager.yesterdaysWeatherForCity("Maribor,SI", closure: { (json) -> () in
+            println("Yesterdays weather: \(json)")
+        })
         return true
     }
 

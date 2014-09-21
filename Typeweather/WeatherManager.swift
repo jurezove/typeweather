@@ -12,7 +12,7 @@ import MapKit
 
 class WeatherManager {
     let HoursDifference = 2
-    let OpenWeatherAPIKey = "cf98fc035983402806b546354723dcf8"
+    let OpenWeatherAPIKey:String = "cf98fc035983402806b546354723dcf8"
     let BaseURL = "http://api.openweathermap.org/data/2.5/"
     
     func testAlamofire() {
@@ -24,21 +24,44 @@ class WeatherManager {
         }
     }
     
-    func currentWeatherFor(city: String) {
-        Alamofire.request(.GET, BaseURL.stringByAppendingPathComponent("weather"), parameters: ["q": city, "APPID": OpenWeatherAPIKey])
-            .responseJSON {(request, response, JSON, error) in
-                println(JSON)
-        }
+    func currentWeatherFor(city: String, closure:(json: AnyObject)->()) {
+        self.currengWeatherFor(["units": measurementUnit(), "q": city], closure:closure)
     }
     
     func currentWeatherFor(coordinate: CLLocationCoordinate2D, closure:(json: AnyObject)->()) {
-        Alamofire.request(.GET, BaseURL.stringByAppendingPathComponent("weather"), parameters: ["units": measurementUnit(), "lat": coordinate.latitude, "lon": coordinate.longitude, "APPID" : OpenWeatherAPIKey])
-            .responseJSON {(request, response, JSON, error) in
-                closure(json: JSON!)
+        self.currengWeatherFor(["units": measurementUnit(), "lat": coordinate.latitude, "lon": coordinate.longitude], closure:closure)
+    }
+    
+    func yesterdaysWeatherForCity(city:String, closure:(json: AnyObject)->()) {
+        self.yesterdaysWeatherForCity(["q" : city], closure: closure)
+    }
+    
+    private func measurementUnit() -> String {
+        if NSLocale.currentLocale().objectForKey(NSLocaleUsesMetricSystem) as Bool {
+            return "metric"
+        } else {
+            return "imperial"
         }
     }
     
-    func yesterdaysWeatherForCity(city:String) {
+    private func saveUpdatedTime() {
+        NSUserDefaults.standardUserDefaults().setValue(NSDate.date(), forKey: kUpdatedLocationTimeKey)
+    }
+    
+    private func currengWeatherFor(params: Dictionary<String, AnyObject>, closure:(json: AnyObject)->()) {
+        var modified:Dictionary<String, AnyObject> = params
+        modified["APPID"] = OpenWeatherAPIKey
+        Alamofire.request(.GET, BaseURL.stringByAppendingPathComponent("weather"), parameters: modified)
+            .responseJSON {(request, response, JSON, error) in
+                closure(json: JSON!)
+                self.saveUpdatedTime()
+        }
+    }
+    
+    private func yesterdaysWeatherForCity(params: [String: AnyObject], closure:(json: AnyObject)->()) {
+        var modified:Dictionary<String, AnyObject> = params
+        modified["APPID"] = OpenWeatherAPIKey
+        
         var yesterdayComponents1 = NSDateComponents()
         yesterdayComponents1.setValue(-1, forComponent: NSCalendarUnit.CalendarUnitDay);
         yesterdayComponents1.setValue(+HoursDifference, forComponent: NSCalendarUnit.CalendarUnitDay);
@@ -53,19 +76,15 @@ class WeatherManager {
         var startUTC = round(start!.timeIntervalSince1970)
         var endUTC = round(end!.timeIntervalSince1970)
         
+        modified["start"] = startUTC
+        modified["end"] = endUTC
+        
         Alamofire.request(.GET, BaseURL.stringByAppendingPathComponent("history/city"),
-            parameters: ["q" : city, "APPID" : OpenWeatherAPIKey, "start" : startUTC, "end": endUTC])
+            parameters: modified)
             .responseJSON {(request, response, JSON, error) in
-                println(request)
-                println(JSON)
-        }
-    }
-    
-    private func measurementUnit() -> String {
-        if NSLocale.currentLocale().objectForKey(NSLocaleUsesMetricSystem) as Bool {
-            return "metric"
-        } else {
-            return "imperial"
+//                println(request)
+//                println(JSON)
+                closure(json: JSON!)
         }
     }
 }

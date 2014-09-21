@@ -43,3 +43,8 @@ class TipCalculator {
 let tipCalc = TipCalculator(total: 33.25, taxPct: 0.06)
 
 tipCalc.returnPossibleTips()
+
+var v:Dictionary<String, String> = ["test":"burek"]
+v["test"]
+v["salat"] = "watafak"
+println(v)

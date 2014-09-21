@@ -22,7 +22,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     lazy var locationManager:CLLocationManager = {
         var manager:CLLocationManager = CLLocationManager()
         manager.delegate = self
-//        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.desiredAccuracy = kCLLocationAccuracyKilometer
         return manager
     }()
     
@@ -35,15 +35,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-//    func delay(delay:Double, closure:()->()) {
-//        dispatch_after(
-//            dispatch_time(
-//                DISPATCH_TIME_NOW,
-//                Int64(delay * Double(NSEC_PER_SEC))
-//            ),
-//            dispatch_get_main_queue(), closure)
-//    }
     
     func displayWeather(json: Dictionary<String, AnyObject>) {
         animateTextChange(mainLabel, closure: { () -> () in
@@ -93,7 +84,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         println("\(locations)")
         let firstLocation = locations[0] as CLLocation
         weatherManager.currentWeatherFor(firstLocation.coordinate, closure: { (json) -> () in
-//            println(json)
             self.displayWeather(json as Dictionary<String, AnyObject>)
         })
 
@@ -117,7 +107,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if (shouldIAllow == true) {
             NSLog("Location to Allowed")
             // Start location services
-//            locationManager.startMonitoringSignificantLocationChanges()
             locationManager.startUpdatingLocation()
         } else {
             mainLabel.text = locationStatus;

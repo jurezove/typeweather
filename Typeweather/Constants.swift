@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 let fontSize:CGFloat = 18.0
+let kUpdatedLocationTimeKey:String = "kUpdatedLocationTimeKey"
 
 class Constants {
 

@@ -10,8 +10,6 @@ import Foundation
 import Alamofire
 import MapKit
 
-
-
 class WeatherManager {
     let HoursDifference = 2
     let OpenWeatherAPIKey:String = "cf98fc035983402806b546354723dcf8"
@@ -26,15 +24,6 @@ class WeatherManager {
         let snow: NSDictionary
     }
     
-    func testAlamofire() {
-        Alamofire.request(.GET, "http://httpbin.org/get", parameters: ["foo": "bar"])
-            .response { (request, response, data, error) in
-                println(request)
-                println(response)
-                println(error)
-        }
-    }
-    
     func currentWeatherFor(city: String, closure:(json: AnyObject)->()) {
         self.currentWeatherFor(["units": measurementUnit(), "q": city], closure:closure)
     }
@@ -47,28 +36,27 @@ class WeatherManager {
         self.yesterdaysWeatherForCity(["q" : city], closure: closure)
     }
     
-    func getYesterdaysAverageTemperature(city: String, closure:(average: Double)->()) {
-        self.yesterdaysWeatherForCity(city, closure: { (json) -> () in
-            println(json)
-            var list:[AnyObject] = json["list"] as Array
-            var sum:Double = 0
-            var count:Double = 0
-            for object in list {
-                let dict:[String:AnyObject] = object as Dictionary
-                if let weather:Weather = self.parseWeather(object as Dictionary) {
-                    sum += weather.main["temp"] as Double
-                    count++
-//                    if (WeatherManager.usingMetric()) {
-//                        let celsius = WeatherManager.convertToCelsius(weather.main["temp"] as Double)
-//                        println("Celsius: \(celsius)°C")
-//                    } else {
-//                        let celsius = WeatherManager.convertToFahrenheit(weather.main["temp"] as Double)
-//                        println("Fahrenheit: \(celsius)°F")
-//                    }
-                }
-            }
-            let average = sum/count
+    func yesterdaysAverageTemperatureForCityID(cityID: Int, closure:(average: Double)->()) {
+        self.yesterdaysAverageTemp(["id": cityID], closure: { (average) -> () in
             closure(average: average)
+        })
+    }
+    
+    func yesterdaysAverageTemperature(city: String, closure:(average: Double)->()) {
+        self.yesterdaysAverageTemp(["q": city], closure: { (average) -> () in
+            closure(average: average)
+        })
+    }
+    
+    func weatherDifferenceForCityID(coordinate: CLLocationCoordinate2D, closure:(difference: WeatherDifference)->()) {
+        self.weatherDifferenceFor(["lat": coordinate.latitude, "lon": coordinate.longitude], closure: { (difference) -> () in
+            closure(difference: difference)
+        })
+    }
+    
+    func weatherDifferenceFor(city: String, closure:(difference: WeatherDifference)->()) {
+        self.weatherDifferenceFor(["q": city], closure: { (difference) -> () in
+            closure(difference: difference)
         })
     }
     
@@ -145,6 +133,39 @@ class WeatherManager {
             }
         }
         return nil
+    }
+    
+    private func yesterdaysAverageTemp(params: [String:AnyObject], closure:(average: Double)->()) {
+        yesterdaysWeatherForCity(params, closure: { (json) -> () in
+            var list:[AnyObject] = json["list"] as Array
+            let average = (list as AnyObject).valueForKeyPath("@avg.main.temp") as Double
+            closure(average: average)
+        })
+    }
+    
+    private func weatherDifferenceFor(params: [String:AnyObject], closure:(difference: WeatherDifference)->()) {
+        self.currentWeatherFor(params, closure: { (json) -> () in
+            // Get yesterdays average temp
+            if let first = json as? [String: AnyObject] {
+                let cityID = first["id"]! as Int
+                let main = first["main"]! as Dictionary<String, AnyObject>
+                let tempKelvin = main["temp"]! as Double
+                var rain = false
+                var snow = false
+                if let hasSnow: AnyObject = first["snow"]? {
+                    snow = true
+                }
+                if let hasRain: AnyObject = first["rain"]? {
+                    rain = true
+                }
+                
+                self.yesterdaysAverageTemperatureForCityID(cityID, closure: { (average) -> () in
+//                    println(average)
+                    let weatherDifference = WeatherDifference(yesterday: average, today: tempKelvin, chanceOfRain: rain, chanceOfSnow: snow)
+                    closure(difference: weatherDifference)
+                })
+            }
+        })
     }
     
 }

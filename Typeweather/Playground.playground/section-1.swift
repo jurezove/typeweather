@@ -44,7 +44,5 @@ let tipCalc = TipCalculator(total: 33.25, taxPct: 0.06)
 
 tipCalc.returnPossibleTips()
 
-var v:Dictionary<String, String> = ["test":"burek"]
-v["test"]
-v["salat"] = "watafak"
-println(v)
+var v:[Dictionary<String, Double>] = [["temp":10], ["temp":11], ["temp":115]]
+println((v as AnyObject).valueForKeyPath("@avg.temp"))

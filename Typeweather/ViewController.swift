@@ -38,11 +38,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     func displayWeather(json: Dictionary<String, AnyObject>) {
         animateTextChange(mainLabel, closure: { () -> () in
-            self.mainLabel.attributedText = Prettyfier.boldify("The weather is great! It's exactly the same as yesterday.", words: NSArray(array: ["the same"]))
+            let w:String = String(format:"The weather is great. It's %@ %@ than yesterday. You might get a bit rain though.", Prettyfier.temperatureText(10), "less")
+            self.mainLabel.attributedText = Prettyfier.boldify(w, words: NSArray(array: ["less"]))
         })
         
         animateTextChange(temperatureLabel, closure: { () -> () in
-//            NSLog("%@", json)
             let main:AnyObject! = json["main"]
             let temp = Double(main["temp"] as Double)
             var name = json["name"] as NSString
@@ -83,8 +83,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.startMonitoringSignificantLocationChanges()
         println("\(locations)")
         let firstLocation = locations[0] as CLLocation
+        
         weatherManager.currentWeatherFor(firstLocation.coordinate, closure: { (json) -> () in
             self.displayWeather(json as Dictionary<String, AnyObject>)
+            
         })
 
     }

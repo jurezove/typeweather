@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2579E26719D019E70068F277 /* WeatherDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2579E26619D019E70068F277 /* WeatherDifference.swift */; };
 		25B386C419CC8C50001C9D50 /* Prettyfier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B386C319CC8C50001C9D50 /* Prettyfier.swift */; };
 		25B386C619CC8C9C001C9D50 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B386C519CC8C9C001C9D50 /* Constants.swift */; };
 		25B386C819CC9800001C9D50 /* Consieur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B386C719CC9800001C9D50 /* Consieur.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2579E26619D019E70068F277 /* WeatherDifference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherDifference.swift; sourceTree = "<group>"; };
 		25B386C319CC8C50001C9D50 /* Prettyfier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prettyfier.swift; sourceTree = "<group>"; };
 		25B386C519CC8C9C001C9D50 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		25B386C719CC9800001C9D50 /* Consieur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Consieur.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				25D3218B19C6277E0088A427 /* AppDelegate.swift */,
 				25D3219019C6277E0088A427 /* ViewController.swift */,
 				25D321C119C62CD70088A427 /* WeatherManager.swift */,
+				2579E26619D019E70068F277 /* WeatherDifference.swift */,
 				25B386C319CC8C50001C9D50 /* Prettyfier.swift */,
 				25B386C519CC8C9C001C9D50 /* Constants.swift */,
 				25B386C719CC9800001C9D50 /* Consieur.swift */,
@@ -328,6 +331,7 @@
 				25D3219119C6277E0088A427 /* ViewController.swift in Sources */,
 				25B386C419CC8C50001C9D50 /* Prettyfier.swift in Sources */,
 				25B386C819CC9800001C9D50 /* Consieur.swift in Sources */,
+				2579E26719D019E70068F277 /* WeatherDifference.swift in Sources */,
 				25D321C219C62CD70088A427 /* WeatherManager.swift in Sources */,
 				25D3218C19C6277E0088A427 /* AppDelegate.swift in Sources */,
 			);

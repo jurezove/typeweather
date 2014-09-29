@@ -36,8 +36,8 @@ class WeatherManager {
         self.yesterdaysWeatherForCity(["q" : city], closure: closure)
     }
     
-    func yesterdaysAverageTemperatureForCityID(cityID: Int, closure:(average: Double)->()) {
-        self.yesterdaysAverageTemp(["id": cityID], closure: { (average) -> () in
+    func yesterdaysAverageTemperatureForCityID(cityID: Int64, closure:(average: Double)->()) {
+        self.yesterdaysAverageTemp(["id": "\(cityID)"], closure: { (average) -> () in
             closure(average: average)
         })
     }
@@ -48,7 +48,7 @@ class WeatherManager {
         })
     }
     
-    func weatherDifferenceForCityID(coordinate: CLLocationCoordinate2D, closure:(difference: WeatherDifference)->()) {
+    func weatherDifferenceForCoordinates(coordinate: CLLocationCoordinate2D, closure:(difference: WeatherDifference)->()) {
         self.weatherDifferenceFor(["lat": coordinate.latitude, "lon": coordinate.longitude], closure: { (difference) -> () in
             closure(difference: difference)
         })
@@ -138,7 +138,11 @@ class WeatherManager {
     private func yesterdaysAverageTemp(params: [String:AnyObject], closure:(average: Double)->()) {
         yesterdaysWeatherForCity(params, closure: { (json) -> () in
             var list:[AnyObject] = json["list"] as Array
-            let average = (list as AnyObject).valueForKeyPath("@avg.main.temp") as Double
+            var average:Double
+            if (list.count > 0) {
+                average = (list as AnyObject).valueForKeyPath("@avg.main.temp") as Double
+            }
+            average = 0
             closure(average: average)
         })
     }
@@ -147,7 +151,7 @@ class WeatherManager {
         self.currentWeatherFor(params, closure: { (json) -> () in
             // Get yesterdays average temp
             if let first = json as? [String: AnyObject] {
-                let cityID = first["id"]! as Int
+                let cityID:Int64 = (first["id"] as? NSNumber)!.longLongValue
                 let main = first["main"]! as Dictionary<String, AnyObject>
                 let tempKelvin = main["temp"]! as Double
                 var rain = false

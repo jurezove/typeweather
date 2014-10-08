@@ -19,24 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-//        let manager = WeatherManager()
-//        manager.yesterdaysAverageTemperature("Ljubljana", closure: { (average) -> () in
-//            if (WeatherManager.usingMetric()) {
-//                let celsius = WeatherManager.convertToCelsius(average)
-//                println("Celsius: \(celsius)°C")
-//            } else {
-//                let fahrenheit = WeatherManager.convertToFahrenheit(average)
-//                println("Fahrenheit: \(fahrenheit)°F")
-//            }
-//        });
-//        manager.weatherDifferenceFor("Maribor, SI", closure: { (difference) -> () in
-//            if (WeatherManager.usingMetric()) {
-//                println("Difference in Celsius: \(difference.differenceInCelsius)°C")
-//            } else {
-//                println("Difference in Fahrenheit: \(difference.differenceInFahrenheit)°F")
-//            }
-//        })
-
         return true
     }
 

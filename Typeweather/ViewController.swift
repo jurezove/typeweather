@@ -36,10 +36,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func displayWeather(difference: WeatherDifference) {
+    func displayWeather(difference: WeatherDifference, weather: Dictionary<String, AnyObject>) {
         animateTextChange(mainLabel, closure: { () -> () in
-            
-//            let w:String = String(format:"The weather is great. It's %@ %@ than yesterday. You might get a bit rain though.", Prettyfier.temperatureText(10), "less")
             var w:String
             var bold:Array<String>
             if (WeatherManager.usingMetric()) {
@@ -54,12 +52,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         })
         
         animateTextChange(temperatureLabel, closure: { () -> () in
-//            let main:AnyObject! = json["main"]
-//            let temp = Double(main["temp"] as Double)
-//            var name = json["name"] as NSString
-//            
-//            self.cityLabel.text = name
-//            self.temperatureLabel.text = Prettyfier.temperatureText(temp)
+            let main:AnyObject! = weather["main"]
+            let temp:Double = Double(main["temp"] as Double)
+            var name:String = weather["name"] as NSString
+            
+            
+            self.cityLabel.text = name
+            self.temperatureLabel.text = Prettyfier.temperatureText(WeatherManager.convertedTemperature(temp))
         })
     }
     
@@ -95,13 +94,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         println("\(locations)")
         let firstLocation = locations[0] as CLLocation
         
-//        weatherManager.currentWeatherFor(firstLocation.coordinate, closure: { (json) -> () in
-//            self.displayWeather(json as Dictionary<String, AnyObject>)
-//            
-//        })
-        
-        weatherManager.weatherDifferenceForCoordinates(firstLocation.coordinate, closure: { (difference) -> () in
-            self.displayWeather(difference)
+        weatherManager.weatherDifferenceForCoordinates(firstLocation.coordinate, closure: { (difference, weather) -> () in
+            self.displayWeather(difference, weather: weather)
             if (WeatherManager.usingMetric()) {
                 println("Difference in Celsius: \(difference.differenceInCelsius)°C")
             } else {

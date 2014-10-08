@@ -11,7 +11,7 @@ import Alamofire
 import MapKit
 
 class WeatherManager {
-    let HoursDifference = 2
+    let HoursDifference = 24
     let OpenWeatherAPIKey:String = "cf98fc035983402806b546354723dcf8"
     let BaseURL = "http://api.openweathermap.org/data/2.5/"
     
@@ -48,19 +48,29 @@ class WeatherManager {
         })
     }
     
-    func weatherDifferenceForCoordinates(coordinate: CLLocationCoordinate2D, closure:(difference: WeatherDifference)->()) {
-        self.weatherDifferenceFor(["lat": coordinate.latitude, "lon": coordinate.longitude], closure: { (difference) -> () in
-            closure(difference: difference)
+    func weatherDifferenceForCoordinates(coordinate: CLLocationCoordinate2D, closure:(difference: WeatherDifference, weather: Dictionary<String, AnyObject>)->()) {
+        self.weatherDifferenceFor(["lat": coordinate.latitude, "lon": coordinate.longitude], closure: { (difference, weather) -> () in
+            closure(difference: difference, weather: weather)
         })
     }
     
-    func weatherDifferenceFor(city: String, closure:(difference: WeatherDifference)->()) {
-        self.weatherDifferenceFor(["q": city], closure: { (difference) -> () in
-            closure(difference: difference)
+    func weatherDifferenceFor(city: String, closure:(difference: WeatherDifference, weather: Dictionary<String, AnyObject>)->()) {
+        self.weatherDifferenceFor(["q": city], closure: { (difference, weather) -> () in
+            closure(difference: difference, weather: weather)
         })
     }
     
     // Class functions
+    
+    class func convertedTemperature(kelvin: Double) -> Double {
+        var convertedTemp:Double = 0
+        if (self.usingMetric()) {
+            convertedTemp = self.convertToCelsius(kelvin)
+        } else {
+            convertedTemp = self.convertToFahrenheit(kelvin)
+        }
+        return convertedTemp
+    }
     
     class func convertToCelsius(kelvin: Double) -> Double {
          return kelvin - 273.15
@@ -147,7 +157,7 @@ class WeatherManager {
         })
     }
     
-    private func weatherDifferenceFor(params: [String:AnyObject], closure:(difference: WeatherDifference)->()) {
+    private func weatherDifferenceFor(params: [String:AnyObject], closure:(difference: WeatherDifference, weather: Dictionary<String, AnyObject>)->()) {
         self.currentWeatherFor(params, closure: { (json) -> () in
             // Get yesterdays average temp
             if let first = json as? [String: AnyObject] {
@@ -164,9 +174,8 @@ class WeatherManager {
                 }
                 
                 self.yesterdaysAverageTemperatureForCityID(cityID, closure: { (average) -> () in
-//                    println(average)
                     let weatherDifference = WeatherDifference(yesterday: average, today: tempKelvin, chanceOfRain: rain, chanceOfSnow: snow)
-                    closure(difference: weatherDifference)
+                    closure(difference: weatherDifference, weather: first)
                 })
             }
         })
